@@ -8,8 +8,6 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ffmpeg \
         libsndfile1 \
-        libcudnn9 \
-        libcudnn9-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir whisperx==3.4.2 && \

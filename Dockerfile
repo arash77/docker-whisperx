@@ -4,11 +4,15 @@ FROM pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Use a non-root user for security (optional)
-RUN useradd -ms /bin/bash appuser
-USER appuser
-WORKDIR /home/appuser
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ffmpeg \
+        libsndfile1 \
+        libcudnn8 \
+        libcudnn8-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install your tool from PyPI or any other way ...
-RUN pip install --no-cache-dir doclayout-yolo==0.0.4
-
+RUN pip install --no-cache-dir whisperx==3.4.2 && \
+    rm -rf /root/.cache/ && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/*

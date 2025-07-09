@@ -1,20 +1,22 @@
-# Base image with PyTorch + CUDA 12.1 + cuDNN 8 runtime
-FROM pytorch/pytorch:2.3.1-cuda12.1-cudnn8-runtime
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+FROM  nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ffmpeg \
         libsndfile1 \
+        python3-pip \
+        python3 \
     && rm -rf /var/lib/apt/lists/*
 
-# update torch with the latest version
-RUN pip install --no-cache-dir --upgrade torch torchvision torchaudio \
+RUN pip3 install --no-cache-dir --upgrade pip
+
+RUN pip3 install --no-cache-dir \
+    torch torchaudio torchvision \
     --extra-index-url https://download.pytorch.org/whl/cu121
 
-RUN pip install --no-cache-dir whisperx==3.4.2 && \
+RUN pip3 install --no-cache-dir whisperx==3.4.2 && \
     rm -rf /root/.cache/ && \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
+
+ENTRYPOINT [""]
